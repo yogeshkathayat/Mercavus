@@ -12,7 +12,7 @@ router.get("/health", (req, res) => res.status(200).send("OK"));
 /**
  * GET v1/docs
  */
-router.use("/docs", express.static("docs"));
+// router.use("/docs", express.static("docs"));
 
 router.use("/hobbies", hobbyRoute);
 router.use("/users", userRoute);

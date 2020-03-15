@@ -14,8 +14,6 @@
     "watch-test": "npm run test -- --watchAll",
     "build-ts": "tsc",
     "watch-ts": "tsc -w",
-    "docs": "apidoc -i src -o docs",
-    "postdocs": "opn docs/index.html",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "debug": "npm run build && npm run watch-debug"
   },
@@ -32,6 +30,7 @@
     "lusca": "^1.6.1",
     "mongoose": "^5.8.11",
     "morgan": "^1.9.1",
+    "validator": "^12.2.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2",
     "yarn": "^1.22.0"
@@ -51,7 +50,7 @@
     "@types/node": "^13.7.0",
     "@types/shelljs": "^0.8.6",
     "@types/supertest": "^2.0.8",
-    "apidoc": "^0.20.0",
+    "@types/validator": "^12.0.1",
     "chai": "^4.2.0",
     "concurrently": "^5.1.0",
     "jest": "^25.1.0",
