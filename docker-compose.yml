@@ -1,0 +1,23 @@
+version: "3"
+networks:
+  default:
+services:
+  mercavus-app:
+    networks:
+      - default
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      ENV_NAME: dev
+      PORT: 3000
+      MONGODB_URL: mongodb://mercavus-mongodb:27017/Mercavus
+    ports:
+      - 3000:3000
+    links:
+      - mercavus-mongodb
+  mercavus-mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
