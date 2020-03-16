@@ -27,7 +27,7 @@ $ yarn
 ## Running the app
 
 ```bash
-# copy env.example to env
+# copy env.example to env (you can change the default port which is 3000)
 $ cp .env.example env
 
 change MONGODB_URL to your mongodb instance connection URL (Mongodb should be installed and running)
@@ -37,6 +37,9 @@ $ yarn build
 
 # start app
 $ yarn start
+
+# app is running on
+http://localhost:3000/
 
 ```
 ## Testing the app
@@ -50,11 +53,10 @@ $ yarn test
 ## Docs
 
 ```bash
-# api doc
-$ yarn docs
+# swagger api doc
+http://localhost:3000/api/v1/docs/
 
 ```
-
 
 
 ## unit tests with coverage report
