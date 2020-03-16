@@ -33,9 +33,14 @@ export class UserController {
         const methodName = "[create]";
         try {
 
-            let createdHobby = await userService.create(req.body);
+            let existingUser = await userService.findOne({name:req.body.name});
 
-            return ResponseHandler.setResponse(res, true, HttpStatus.CREATED, errorMessage.SUCCESS, version.v1, createdHobby);
+            if(existingUser){
+                return ResponseHandler.setResponse(res, true, HttpStatus.OK, `User ${errorMessage.ALREADY_EXISTS}`, version.v1, existingUser);
+            }
+            let createdUser = await userService.create(req.body);
+
+            return ResponseHandler.setResponse(res, true, HttpStatus.CREATED, errorMessage.SUCCESS, version.v1, createdUser);
         }
         catch (error) {
             logger.error(`${fileName} ${methodName} error in main try block ${error}`);
@@ -66,7 +71,7 @@ export class UserController {
                     }
                 );
             }
-            let userObject = await userService.findOne(id);
+            let userObject = await userService.findOne({_id:id});
 
             return ResponseHandler.setResponse(res, true, HttpStatus.OK, errorMessage.SUCCESS, version.v1, userObject);
         }
@@ -120,7 +125,7 @@ export class UserController {
                     }
                 );
             }
-            let existingUser = await userService.findOne(id);
+            let existingUser = await userService.findOne({_id:id});
 
             if (!existingUser) {
                 return ResponseHandler.setResponse(
@@ -166,7 +171,7 @@ export class UserController {
                     }
                 );
             }
-            let existingUser = await userService.findOne(id);
+            let existingUser = await userService.findOne({_id:id});
 
             if (!existingUser) {
                 return ResponseHandler.setResponse(

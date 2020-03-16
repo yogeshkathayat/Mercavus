@@ -1,6 +1,8 @@
 import request from "supertest";
 import app from "../src/config/app";
-let createdHobby = '';
+
+
+
 /**
  * Connecting with database before running test cases
  */
@@ -9,6 +11,16 @@ beforeAll(async () => {
     setTimeout(() => {
         import("../src/config/mongoose");
     }, 4000);
+
+    let data= {
+        name: 'Running',
+        passionLevel: 'high'
+    };
+
+    let createdHobby = await request(app)
+    .post("/api/v1/hobbies")
+    .send(data);
+
 });
 
 
@@ -31,6 +43,8 @@ describe("POST /api/v1/hobbies", function () {
     let data = {
         // no parameters
     };
+
+    
     it("It should return 400 BAD REQUEST without name parameter", function (done) {
         request(app)
             .post("/api/v1/hobbies")
@@ -82,21 +96,38 @@ describe("POST /api/v1/hobbies", function () {
     });
 
     let data4 = {
-        name: 'swimming',
+        name: 'Running',
+        passionLevel: 'low'
+    }
+
+    it("It should return 200 OK when hobby already exists", function (done) {
+        request(app)
+            .post("/api/v1/hobbies")
+            .send(data4)
+            .set("Content-Type", "application/json")
+            .expect("Content-Type", /json/)
+            .expect(200)
+            .end((err) => {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+
+    let data5 = {
+        name: 'reading',
         passionLevel: 'low'
     }
 
     it("It should return 201 CREATED when the req.body parameter are correct", function (done) {
         request(app)
             .post("/api/v1/hobbies")
-            .send(data4)
+            .send(data5)
             .set("Content-Type", "application/json")
             .expect("Content-Type", /json/)
             .expect(201)
-            .end((err, data) => {
+            .end((err) => {
                 if (err) return done(err);
-
-                createdHobby = data['body']['data']['_id']
                 done();
             });
     });
@@ -147,7 +178,8 @@ describe("GET /api/v1/hobbies/:id", function () {
     });
 
 
-    let id2 = createdHobby;
+
+    let id2 = '5e6e3bbe93ddaf21a272ba19';
 
     it("It should return 200 OK with correct hobby id ", function (done) {
         request(app)
@@ -164,7 +196,7 @@ describe("GET /api/v1/hobbies/:id", function () {
     let id3 = '5e6e3c8e9723322324fed10e';
     it("It should return 404 OK with valid but incorrect hobby id ", function (done) {
         request(app)
-            .get("/api/v1/hobbies/" + id2)
+            .get("/api/v1/hobbies/" + id3)
             .set("Content-Type", "application/json")
             .expect("Content-Type", /json/)
             .expect(404)
@@ -219,24 +251,6 @@ describe("PUT /api/v1/hobbies/:id", function () {
                 done();
             });
     });
-
-
-    // let id2 = 'safasfdasdf';
-    // let updateData2 = createdHobby;
-    // updateData2['passionLevel'] = 'high';
-
-    // it("It should return 200 OK with correct hobby id ", function (done) {
-    //     request(app)
-    //         .put("/api/v1/hobbies/" + id2)
-    //         .send(updateData)
-    //         .set("Content-Type", "application/json")
-    //         .expect("Content-Type", /json/)
-    //         .expect(200)
-    //         .end((err) => {
-    //             if (err) return done(err);
-    //             done();
-    //         });
-    // });
 });
 
 
@@ -262,9 +276,7 @@ describe("DELETE /api/v1/hobbies/:id", function () {
 
 
     let id3 = '5e6e3c8e9723322324fed10e';
-    let updateData3 = {
 
-    }
     it("It should return 404 OK with valid but incorrect hobby id ", function (done) {
         request(app)
             .delete("/api/v1/hobbies/" + id3)
@@ -279,7 +291,7 @@ describe("DELETE /api/v1/hobbies/:id", function () {
 
 
 
-    let id2 = createdHobby;
+    let id2 ='5e6e3bbe93ddaf21a272ba19';
 
     it("It should return 200 OK with correct hobby id ", function (done) {
         request(app)

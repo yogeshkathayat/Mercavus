@@ -33,13 +33,13 @@ export class UserService {
     /**
      * @description function to find
      * user based on id
-     * @param {string} id 
+     * @param {object} query 
      * @returns {object} {}
      */
-    public async findOne(id: string) {
+    public async findOne(query:object) {
         const methodName = "[findOne]";
         try {
-            return await UserModel.findOne({ _id: id }).populate('hobbies');
+            return await UserModel.findOne(query).populate('hobbies');
         }
         catch (error) {
             throw error;

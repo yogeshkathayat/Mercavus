@@ -1,6 +1,5 @@
 import request from "supertest";
 import app from "../src/config/app";
-let createdUser='' ;
 /**
  * Connecting with database before running test cases
  */
@@ -9,6 +8,15 @@ beforeAll(async () => {
     setTimeout(() => {
         import("../src/config/mongoose");
     }, 4000);
+
+    let data = {
+        name: 'John'
+    }
+
+    await request(app)
+    .post("/api/v1/users")
+    .send(data)
+
 });
 
 
@@ -64,7 +72,7 @@ describe("POST /api/v1/users", function () {
 
 
     let data3 = {
-        name: 'swimming',
+        name: 'James',
         hobbies:['asdfasdf']
     }
 
@@ -75,7 +83,7 @@ describe("POST /api/v1/users", function () {
             .set("Content-Type", "application/json")
             .expect("Content-Type", /json/)
             .expect(500)
-            .end((err, data) => {
+            .end((err) => {
                 if (err) return done(err);
                 done();
             });
@@ -85,10 +93,27 @@ describe("POST /api/v1/users", function () {
         name: 'John'
     }
 
-    it("It should return 201 CREATED when the req.body parameter are correct", function (done) {
+    it("It should return 200 OK when the user already exists", function (done) {
         request(app)
             .post("/api/v1/users")
             .send(data4)
+            .set("Content-Type", "application/json")
+            .expect("Content-Type", /json/)
+            .expect(200)
+            .end((err, data) => {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    let data5 = {
+        name: 'Miller'
+    }
+
+    it("It should return 201 CREATED when the req.body parameter are correct", function (done) {
+        request(app)
+            .post("/api/v1/users")
+            .send(data5)
             .set("Content-Type", "application/json")
             .expect("Content-Type", /json/)
             .expect(201)
@@ -145,9 +170,9 @@ describe("GET /api/v1/users/:id", function () {
     });
 
 
-    let id2 = createdUser;
+    let id2 ='5e6e270e0e2d2c0b22f5e3a6';
 
-    it("It should return 200 OK with correct hobby id ", function (done) {
+    it("It should return 200 OK with correct user id ", function (done) {
         request(app)
             .get("/api/v1/users/" + id2)
             .set("Content-Type", "application/json")
@@ -185,24 +210,6 @@ describe("PUT /api/v1/users/:id", function () {
                 done();
             });
     });
-
-
-    // let id2 = 'safasfdasdf';
-    // let updateData2 = createdHobby;
-    // updateData2['passionLevel'] = 'high';
-
-    // it("It should return 200 OK with correct hobby id ", function (done) {
-    //     request(app)
-    //         .put("/api/v1/users/" + id2)
-    //         .send(updateData)
-    //         .set("Content-Type", "application/json")
-    //         .expect("Content-Type", /json/)
-    //         .expect(200)
-    //         .end((err) => {
-    //             if (err) return done(err);
-    //             done();
-    //         });
-    // });
 });
 
 
@@ -227,7 +234,7 @@ describe("DELETE /api/v1/users/:id", function () {
     });
 
 
-    let id2 = createdUser;
+    let id2 = '5e6e270e0e2d2c0b22f5e3a6';
 
     it("It should return 200 OK with correct hobby id ", function (done) {
         request(app)

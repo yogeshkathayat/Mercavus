@@ -2,7 +2,8 @@ export const errorMessage = {
     SUCCESS: "Sucess",
     FAILED: "Failed",
     NOT_FOUND: "Page Not Found",
-    INTERNAL_SERVER_ERROR: "Internal Server Error"
+    INTERNAL_SERVER_ERROR: "Internal Server Error",
+    ALREADY_EXISTS: "Already exists" 
 
 };
 

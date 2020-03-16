@@ -11,7 +11,7 @@ import {
 import logger from "../../config/logger";
 import { HobbyService } from "../services/hobby.service";
 
-const hobbyService=new HobbyService();
+const hobbyService = new HobbyService();
 const fileName = "[Hobby.controller.js]";
 
 
@@ -22,7 +22,7 @@ const fileName = "[Hobby.controller.js]";
  * @class
  */
 export class HobbyController {
- 
+
 
     constructor() {
 
@@ -36,7 +36,11 @@ export class HobbyController {
     public async create(req: Request, res: Response) {
         const methodName = "[create]";
         try {
+            let existingHobby = await hobbyService.findOne({ name: req.body.name });
 
+            if (existingHobby) {
+                return ResponseHandler.setResponse(res, true, HttpStatus.OK, `Hobby ${errorMessage.ALREADY_EXISTS}`, version.v1, existingHobby);
+            }
             let createdHobby = await hobbyService.create(req.body);
 
             return ResponseHandler.setResponse(res, true, HttpStatus.CREATED, errorMessage.SUCCESS, version.v1, createdHobby);
@@ -58,7 +62,7 @@ export class HobbyController {
         const methodName = "[findOne]";
         try {
             const { id } = req.params;
-            if(!isMongoId(id)){
+            if (!isMongoId(id)) {
                 return ResponseHandler.setResponse(
                     res,
                     false,
@@ -71,7 +75,7 @@ export class HobbyController {
                 );
             }
 
-            let hobbyObject = await hobbyService.findOne(id);
+            let hobbyObject = await hobbyService.findOne({_id:id});
 
             return ResponseHandler.setResponse(res, true, HttpStatus.OK, errorMessage.SUCCESS, version.v1, hobbyObject);
         }
@@ -113,7 +117,7 @@ export class HobbyController {
         const methodName = "[update]";
         try {
             const { id } = req.params;
-            if(!isMongoId(id)){
+            if (!isMongoId(id)) {
                 return ResponseHandler.setResponse(
                     res,
                     false,
@@ -125,7 +129,7 @@ export class HobbyController {
                     }
                 );
             }
-            let existingHobby = await hobbyService.findOne(id);
+            let existingHobby = await hobbyService.findOne({_id:id});
 
             if (!existingHobby) {
                 return ResponseHandler.setResponse(
@@ -163,7 +167,7 @@ export class HobbyController {
         const methodName = "[delete]";
         try {
             const { id } = req.params;
-            if(!isMongoId(id)){
+            if (!isMongoId(id)) {
                 return ResponseHandler.setResponse(
                     res,
                     false,
@@ -175,7 +179,7 @@ export class HobbyController {
                     }
                 );
             }
-            let existingHobby = await hobbyService.findOne(id);
+            let existingHobby = await hobbyService.findOne({_id:id});
 
             if (!existingHobby) {
                 return ResponseHandler.setResponse(

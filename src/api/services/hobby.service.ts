@@ -31,13 +31,13 @@ export class HobbyService {
     /**
      * @description function to find
      * hobby based on id
-     * @param {string} id 
+     * @param {object} query 
      * @returns {object} {}
      */
-    public async findOne(id: string) {
+    public async findOne(query: object) {
         const methodName = "[findOne]";
         try {
-            return await HobbyModel.findOne({ _id: id });
+            return await HobbyModel.findOne(query);
         }
         catch (error) {
             throw error;
